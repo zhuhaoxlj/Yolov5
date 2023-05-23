@@ -57,27 +57,27 @@ class FullScreenAnalyse(
         var dLength: Float
     )
 
-    var nVariance = 0f
-    var dVariance = 0f
-    var nLength = 0f
-    var dLength = 0f
+    private var nVariance = 0f
+    private var dVariance = 0f
+    private var nLength = 0f
+    private var dLength = 0f
 
     // 过滤异常点阈值
-    var POINT_THRESHOLD = 500
-    var maxLength = 15
-    var noResultFrameCount = 0
-    var imageProcess: ImageProcess
+    private var POINT_THRESHOLD = 500
+    private var maxLength = 15
+    private var noResultFrameCount = 0
+    private var imageProcess: ImageProcess
     private val yolov5TFLiteDetector: Yolov5TFLiteDetector
 
     // 在类的范围内创建一个集合来保存历史圆点的坐标
-    var nPointList = ArrayList<PointF>()
-    var dPointList = ArrayList<PointF>()
-    var p1_mean_x = 0.0
-    var p1_mean_y = 0.0
-    var p2_mean_x = 0.0
-    var p2_mean_y = 0.0
-    var longTermPointList1 = ArrayList<PointF>()
-    var longTermPointList2 = ArrayList<PointF>()
+    private var nPointList = ArrayList<PointF>()
+    private var dPointList = ArrayList<PointF>()
+    private var p1_mean_x = 0.0
+    private var p1_mean_y = 0.0
+    private var p2_mean_x = 0.0
+    private var p2_mean_y = 0.0
+    private var longTermPointList1 = ArrayList<PointF>()
+    private var longTermPointList2 = ArrayList<PointF>()
 
     init {
         imageProcess = ImageProcess()

@@ -79,7 +79,7 @@ public class CameraProcess {
 
                 CameraSelector cameraSelector = new CameraSelector.Builder()
                         .requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
-                previewBuilder.setSurfaceProvider(previewView.createSurfaceProvider());
+                previewBuilder.setSurfaceProvider(previewView.getSurfaceProvider());
 
                 cameraProvider.unbindAll();
                 Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner) context, cameraSelector, imageAnalysis, previewBuilder);

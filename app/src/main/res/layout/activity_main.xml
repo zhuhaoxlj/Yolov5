@@ -13,14 +13,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.camera.view.PreviewView
-        android:id="@+id/camera_preview_wrap"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#00000000"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ImageView
         android:id="@+id/box_label_canvas"
         android:layout_width="match_parent"
@@ -177,10 +169,10 @@
                 android:id="@+id/model_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="5dp"
                 android:text="yolov5s"
-                android:layout_alignParentEnd="true"
                 android:textColor="#FFFFFF" />
 
             <Spinner

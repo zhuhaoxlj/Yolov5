@@ -37,7 +37,7 @@ import java.util.PriorityQueue
  */
 class Yolov5TFLiteDetector {
     val inputSize = Size(640, 640)
-    val outputSize = intArrayOf(1, 25200, 7)
+    private val outputSize = intArrayOf(1, 25200, 7)
     private var IS_INT8 = true
     private val DETECT_THRESHOLD = 0.2f
     private val IOU_THRESHOLD = 0.45f
@@ -91,7 +91,7 @@ class Yolov5TFLiteDetector {
             tflite = Interpreter(tfliteModel, options)
             Log.i("tfliteSupport", "Success reading model: $MODEL_FILE")
             associatedAxisLabels = FileUtil.loadLabels(activity, labelFile)
-            Log.i("tfliteSupport", "Success reading label: " + labelFile)
+            Log.i("tfliteSupport", "Success reading label: $labelFile")
         } catch (e: IOException) {
             Log.e("tfliteSupport", "Error reading model or label: ", e)
             Toast.makeText(activity, "load model error: " + e.message, Toast.LENGTH_LONG).show()
@@ -170,10 +170,10 @@ class Yolov5TFLiteDetector {
             val y = recognitionArray[1 + gridStride] * inputSize.height
             val w = recognitionArray[2 + gridStride] * inputSize.width
             val h = recognitionArray[3 + gridStride] * inputSize.height
-            val xmin = Math.max(0.0, x - w / 2.0).toInt()
-            val ymin = Math.max(0.0, y - h / 2.0).toInt()
-            val xmax = Math.min(inputSize.width.toDouble(), x + w / 2.0).toInt()
-            val ymax = Math.min(inputSize.height.toDouble(), y + h / 2.0).toInt()
+            val xmin = 0.0.coerceAtLeast(x - w / 2.0).toInt()
+            val ymin = 0.0.coerceAtLeast(y - h / 2.0).toInt()
+            val xmax = inputSize.width.toDouble().coerceAtMost(x + w / 2.0).toInt()
+            val ymax = inputSize.height.toDouble().coerceAtMost(y + h / 2.0).toInt()
             val confidence = recognitionArray[4 + gridStride]
             val classScores =
                 Arrays.copyOfRange(recognitionArray, 5 + gridStride, outputSize[2] + gridStride)
@@ -215,9 +215,8 @@ class Yolov5TFLiteDetector {
      * @param allRecognitions
      * @return
      */
-    protected fun nms(allRecognitions: ArrayList<Recognition>): ArrayList<Recognition?> {
+    private fun nms(allRecognitions: ArrayList<Recognition>): ArrayList<Recognition?> {
         val nmsRecognitions = ArrayList<Recognition?>()
-
         // 遍历每个类别, 在每个类别下做nms
         for (i in 0 until outputSize[2] - 5) {
             // 这里为每个类别做一个队列, 把labelScore高的排前面
@@ -260,7 +259,7 @@ class Yolov5TFLiteDetector {
      * @param allRecognitions
      * @return
      */
-    protected fun nmsAllClass(allRecognitions: ArrayList<Recognition?>): ArrayList<Recognition?> {
+    private fun nmsAllClass(allRecognitions: ArrayList<Recognition?>): ArrayList<Recognition?> {
         val nmsRecognitions = ArrayList<Recognition?>()
         val pq = PriorityQueue(
             100
@@ -293,7 +292,7 @@ class Yolov5TFLiteDetector {
         return nmsRecognitions
     }
 
-    fun boxIou(a: RectF, b: RectF): Float {
+    private fun boxIou(a: RectF, b: RectF): Float {
         val intersection = boxIntersection(a, b)
         val union = boxUnion(a, b)
         return if (union <= 0) {

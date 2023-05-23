@@ -21,6 +21,7 @@ import com.bdca.yolov5.analysis.FullScreenAnalyse
 import com.bdca.yolov5.databinding.ActivityMainBinding
 import com.bdca.yolov5.detector.Yolov5TFLiteDetector
 import com.bdca.yolov5.utils.CameraProcess
+import com.bdca.yolov5.utils.ImageProcess
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
@@ -31,7 +32,6 @@ import com.xuexiang.xui.utils.XToastUtils
  */
 class MainActivity : AppCompatActivity() {
     private lateinit var cameraPreviewMatch: PreviewView
-    private lateinit var cameraPreviewWrap: PreviewView
     private var boxLabelCanvas: ImageView? = null
     private lateinit var drawRectSwitch: SwitchCompat
     private lateinit var showStatusButton: ImageView
@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private var yolov5TFLiteDetector: Yolov5TFLiteDetector? = null
     private val cameraProcess: CameraProcess = CameraProcess()
     private var binding: ActivityMainBinding? = null
+    private lateinit var imageProcess: ImageProcess
 
     /**
      * 加载模型
@@ -86,7 +87,6 @@ class MainActivity : AppCompatActivity() {
                 layout
             )
         }
-        cameraPreviewWrap = findViewById(R.id.camera_preview_wrap)
         // box/label画面
         boxLabelCanvas = findViewById(R.id.box_label_canvas)
         // 沉浸式体验按钮
@@ -104,7 +104,6 @@ class MainActivity : AppCompatActivity() {
         cameraProcess.showCameraSupportSize(this@MainActivity)
         // 初始化加载yolov5s
         initModel("best model")
-        cameraPreviewWrap.removeAllViews()
         val fullScreenAnalyse = FullScreenAnalyse(
             this@MainActivity,
             cameraPreviewMatch,
@@ -115,7 +114,7 @@ class MainActivity : AppCompatActivity() {
             yolov5TFLiteDetector!!
         )
         val resetButton = findViewById<Button>(R.id.reset)
-        resetButton.setOnClickListener { v: View? -> fullScreenAnalyse.reset() }
+        resetButton.setOnClickListener { fullScreenAnalyse.reset() }
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         val screenWidth = displayMetrics.widthPixels
@@ -130,14 +129,14 @@ class MainActivity : AppCompatActivity() {
         drawRectSwitch.setOnCheckedChangeListener { _: CompoundButton?, b: Boolean ->
             isDrawRect = b
         }
-        binding!!.score.setOnClickListener { v: View? ->
+        binding!!.score.setOnClickListener {
             val intent = Intent(this@MainActivity, ScoreActivity::class.java)
             startActivity(intent)
         }
     }
 
     private fun showLayoutWithAnimation(view: View) {
-        showStatusButton!!.visibility = View.INVISIBLE
+        showStatusButton.visibility = View.INVISIBLE
         // 先将布局设置为可见
         view.visibility = View.VISIBLE
         val animator = ObjectAnimator.ofFloat(view, "translationY", view.height.toFloat(), 0f)
