@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Yolov5</string>
+
+    <string-array name="model">
+        <item>best model</item>
+        <item>old model</item>
+        <item>latest model</item>
+    </string-array>
+</resources>
