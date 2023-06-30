@@ -172,7 +172,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="5dp"
-                android:text="yolov5s"
+                android:text="improved_yolov8s"
                 android:textColor="#FFFFFF" />
 
             <Spinner

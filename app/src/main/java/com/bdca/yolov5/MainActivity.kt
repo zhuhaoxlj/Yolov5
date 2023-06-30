@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             yolov5TFLiteDetector = Yolov5TFLiteDetector()
             yolov5TFLiteDetector!!.modelFile = modelName
             yolov5TFLiteDetector!!.addNNApiDelegate()
-            yolov5TFLiteDetector!!.addGpuDelegate()
+//            yolov5TFLiteDetector!!.addGpuDelegate()
             yolov5TFLiteDetector!!.initialModel(this)
             Log.i("model", "Success loading model: " + yolov5TFLiteDetector!!.modelFile)
         } catch (e: Exception) {

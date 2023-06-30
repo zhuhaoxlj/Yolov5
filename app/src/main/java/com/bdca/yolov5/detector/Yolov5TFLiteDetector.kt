@@ -321,27 +321,25 @@ class Yolov5TFLiteDetector {
     fun addNNApiDelegate() {
         val nnApiDelegate: NnApiDelegate
         // Initialize interpreter with NNAPI delegate for Android Pie or above
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val nnApiOptions = NnApiDelegate.Options()
-            nnApiOptions.maxNumberOfDelegatedPartitions = 4
-            val sdCardDir = Environment.getExternalStorageDirectory()
-            val directory = File(sdCardDir.path + "/bdca/ai/")
-            if (!directory.exists()) {
-                val result = directory.mkdirs()
-            }
-            nnApiOptions.cacheDir = sdCardDir.path + "/bdca/ai/"
-            nnApiOptions.allowFp16 = true
-            nnApiOptions.useNnapiCpu = true
-            //ANEURALNETWORKS_PREFER_LOW_POWER：倾向于以最大限度减少电池消耗的方式执行。这种设置适合经常执行的编译。
-            //ANEURALNETWORKS_PREFER_FAST_SINGLE_ANSWER：倾向于尽快返回单个答案，即使这会耗费更多电量。这是默认值。
-            //ANEURALNETWORKS_PREFER_SUSTAINED_SPEED：倾向于最大限度地提高连续帧的吞吐量，例如，在处理来自相机的连续帧时。
-            nnApiOptions.executionPreference =
-                NnApiDelegate.Options.EXECUTION_PREFERENCE_SUSTAINED_SPEED
-            nnApiDelegate = NnApiDelegate(nnApiOptions)
-            //            nnApiDelegate = new NnApiDelegate();
-            options.addDelegate(nnApiDelegate)
-            Log.i("tfliteSupport", "using nnapi delegate.")
+        val nnApiOptions = NnApiDelegate.Options()
+        nnApiOptions.maxNumberOfDelegatedPartitions = 4
+        val sdCardDir = Environment.getExternalStorageDirectory()
+        val directory = File(sdCardDir.path + "/bdca/ai/")
+        if (!directory.exists()) {
+            directory.mkdirs()
         }
+        nnApiOptions.cacheDir = sdCardDir.path + "/bdca/ai/"
+        nnApiOptions.allowFp16 = true
+        nnApiOptions.useNnapiCpu = true
+        //ANEURALNETWORKS_PREFER_LOW_POWER：倾向于以最大限度减少电池消耗的方式执行。这种设置适合经常执行的编译。
+        //ANEURALNETWORKS_PREFER_FAST_SINGLE_ANSWER：倾向于尽快返回单个答案，即使这会耗费更多电量。这是默认值。
+        //ANEURALNETWORKS_PREFER_SUSTAINED_SPEED：倾向于最大限度地提高连续帧的吞吐量，例如，在处理来自相机的连续帧时。
+        nnApiOptions.executionPreference =
+            NnApiDelegate.Options.EXECUTION_PREFERENCE_SUSTAINED_SPEED
+        nnApiDelegate = NnApiDelegate(nnApiOptions)
+        //            nnApiDelegate = new NnApiDelegate();
+        options.addDelegate(nnApiDelegate)
+        Log.i("tfliteSupport", "using nnapi delegate.")
     }
 
     fun rotateRectF(rect: RectF): RectF {
@@ -359,7 +357,7 @@ class Yolov5TFLiteDetector {
         val compatibilityList = CompatibilityList()
         if (compatibilityList.isDelegateSupportedOnThisDevice) {
             val delegateOptions = compatibilityList.bestOptionsForThisDevice
-            delegateOptions.setQuantizedModelsAllowed(true)
+//            delegateOptions.setQuantizedModelsAllowed(true)
             val gpuDelegate = GpuDelegate(delegateOptions)
             options.addDelegate(gpuDelegate)
             Log.i("tfliteSupport", "using gpu delegate.")
